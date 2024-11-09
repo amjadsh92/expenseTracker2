@@ -11,7 +11,7 @@ include "connection.php";
   $result = $query->get_result();
 
   
-if ($result->num_rows > 0){
+
   $transactions = [];
 
   while($resultObject = $result->fetch_assoc()){
@@ -19,8 +19,6 @@ if ($result->num_rows > 0){
   }
     
     echo json_encode($transactions);
-  } else {
-    echo json_encode([
-      "message" => "Not Found"
-    ]);
-  }
+   
+    
+  

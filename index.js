@@ -7,8 +7,8 @@ const clearFilterButton = document.getElementById("clear-filters");
 let transactions = [];
 let filtered = []; 
 let totalBudget = 0;
-var counter = 0;
-let deleted = false;
+
+
 
 
 
@@ -22,15 +22,6 @@ formButton.addEventListener("click", async (e) => {
     const date = document.getElementById("date").value;
 
     
-    
-    let transaction = {
-        id: counter ++,
-        name,
-        amount: Number(amount),
-        category,
-        date
-    };
-     
     const formdata = new FormData();
     formdata.append("description", name);
     formdata.append("amount", amount);
@@ -46,29 +37,28 @@ formButton.addEventListener("click", async (e) => {
      response = await fetch("addTransaction.php", requestOptions)
      
 
-     transactions = await fetch("getAllTransactions.php")
-
-     transactions = await transactions.json()
-
-
-    //transactions.push(transaction);
-    //showTransactions(transactions)
-    //updateBudget(transaction)
-
-    loadTransaction()
+     loadTransactions()
     
 
 });
 
-transactionList.addEventListener("click", (e) => {
+transactionList.addEventListener("click", async (e) => {
     
     if (e.target.classList.contains("delete-btn")) {
         const id = parseInt(e.target.dataset.id);
-        let transaction = transactions.find(expense => expense.id === id);
-        transactions = transactions.filter(expense => expense.id !== id);
-        deleted = true
-        showTransactions(transactions);
-        updateBudget(transaction)
+       
+
+        const requestOptions = {
+            method: "DELETE",
+            redirect: "follow"
+          };
+          
+          await fetch("./deleteTransaction.php?id=" + id, requestOptions)
+
+          loadTransactions()
+
+            
+        
        
         
         
@@ -168,57 +158,45 @@ filterCategory.addEventListener("click",  (e) => {
 
 function updateBudget(transaction){
 
-        if(deleted){
-
-            if(transaction.type === 'income'){
-
-                totalBudget -= transaction.amount
-                deleted = false
-            }
-            else if(transaction.type === 'expense'){
-    
-                totalBudget += transaction.amount;
-                deleted = false
-    
-    
-            }    
-
-
-        }
-
-        else{
+        
 
 
             if(transaction.type === 'income'){
 
                 totalBudget += transaction.amount
-                deleted = false
+               
             }
             else if(transaction.type === 'expense'){
     
                 totalBudget -= transaction.amount;
-                deleted  = false
+                
     
     
-            }    
+            }   
+            
+            budge.innerHTML = totalBudget
         }
     
    
 
         
          
-        budge.innerHTML = totalBudget
+       
 
-        } 
+        
         
 
 
- const loadTransaction = async () => {
+ const loadTransactions = async () => {
 
      transactions  = await fetch("getAllTransactions.php")
      transactions = await transactions.json()
      showTransactions(transactions)
-
+     totalBudget=0
+    
+     budge.innerHTML = totalBudget
+        
+     
      for (let transaction of transactions){
 
         updateBudget(transaction)
@@ -227,7 +205,7 @@ function updateBudget(transaction){
  }       
 
 
- loadTransaction()
+ loadTransactions()
 
 
 
