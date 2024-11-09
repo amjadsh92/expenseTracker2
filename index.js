@@ -5,14 +5,14 @@ const filterCategory = document.getElementById("apply-filters");
 const clearFilterButton = document.getElementById("clear-filters");
 
 let transactions = [];
-let filtered = []; a
+let filtered = []; 
 let totalBudget = 0;
 var counter = 0;
 let deleted = false;
 
 
 
-formButton.addEventListener("click", (e) => {
+formButton.addEventListener("click", async (e) => {
     
     e.preventDefault();
     //debugger;
@@ -30,12 +30,33 @@ formButton.addEventListener("click", (e) => {
         category,
         date
     };
+     
+    const formdata = new FormData();
+    formdata.append("description", name);
+    formdata.append("amount", amount);
+    formdata.append("type", category);
+    formdata.append("date", date);
+    
+    const requestOptions = {
+      method: "POST",
+      body: formdata,
+      redirect: "follow"
+    };
+    
+     response = await fetch("addTransaction.php", requestOptions)
+     
+
+     transactions = await fetch("getAllTransactions.php")
+
+     transactions = await transactions.json()
 
 
-    transactions.push(transaction);
-    showTransactions(transactions)
-    updateBudget(transaction)
-    updateLocalStorage()
+    //transactions.push(transaction);
+    //showTransactions(transactions)
+    //updateBudget(transaction)
+
+    loadTransaction()
+    
 
 });
 
@@ -48,7 +69,8 @@ transactionList.addEventListener("click", (e) => {
         deleted = true
         showTransactions(transactions);
         updateBudget(transaction)
-        updateLocalStorage()
+       
+        
         
     }
 
@@ -64,9 +86,9 @@ function showTransactions(transactions) {
 
         row.innerHTML = `
             <td>${transaction.date}</td>
-            <td>${transaction.name}</td>
+            <td>${transaction.description}</td>
             <td>${transaction.amount}</td>
-            <td>${transaction.category}</td>
+            <td>${transaction.type}</td>
             <td>
                 
                 <button class="delete-btn" data-id="${transaction.id}">Delete</button>
@@ -112,7 +134,7 @@ filterCategory.addEventListener("click",  (e) => {
     if (filterType){
 
 
-        filteredTransactions = filteredTransactions.filter( transaction => transaction.category == filterType);
+        filteredTransactions = filteredTransactions.filter( transaction => transaction.type == filterType);
       
       }
 
@@ -148,12 +170,12 @@ function updateBudget(transaction){
 
         if(deleted){
 
-            if(transaction.category === 'income'){
+            if(transaction.type === 'income'){
 
                 totalBudget -= transaction.amount
                 deleted = false
             }
-            else if(transaction.category === 'expense'){
+            else if(transaction.type === 'expense'){
     
                 totalBudget += transaction.amount;
                 deleted = false
@@ -167,12 +189,12 @@ function updateBudget(transaction){
         else{
 
 
-            if(transaction.category === 'income'){
+            if(transaction.type === 'income'){
 
                 totalBudget += transaction.amount
                 deleted = false
             }
-            else if(transaction.category === 'expense'){
+            else if(transaction.type === 'expense'){
     
                 totalBudget -= transaction.amount;
                 deleted  = false
@@ -190,41 +212,28 @@ function updateBudget(transaction){
         } 
         
 
-function updateLocalStorage(){
+
+ const loadTransaction = async () => {
+
+     transactions  = await fetch("getAllTransactions.php")
+     transactions = await transactions.json()
+     showTransactions(transactions)
+
+     for (let transaction of transactions){
+
+        updateBudget(transaction)
+     } 
+
+ }       
 
 
-    const data = {
-        transaction: transactions,
-        totalBudget,
-        counter
+ loadTransaction()
 
-    }
 
-    localStorage.setItem("savedTransactions", JSON.stringify(data))
-}        
-        
-    
 
-    
-function loadLocalStorage(){
 
-    let data = localStorage.getItem("savedTransactions")
 
-    if (!data){
-        return
-    }
-    data = JSON.parse(data)
-    transactions = data.transactions;
-    totalBudget = data.totalBudget;
-    counter = data.counter
-    
 
-};
-
-loadLocalStorage()
-showTransactions(transactions)
-
-budge.innerHTML = totalBudget
 
 
 

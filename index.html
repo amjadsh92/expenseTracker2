@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="styles/home.css">
+    <link rel="stylesheet" href="styles/base/color.css">
+    <link rel="stylesheet" href="styles/base/utilities.css">
+</head>
+<body>
+    <header>
+        <h1 class="auto fit-content"> Expense Tracker App</h1>
+    </header>
+
+    <main id="app" class="app flex column space-evenly">
+
+        <section  class="container flex row">
+           <h3>Total Budget = </h3>
+           <h3 id="budget"></h3> 
+           <h3>$</h3>
+
+        </section>
+
+         
+        <section id="transaction-form" class=" container more-padding transaction-form flex column space-between">
+            <h3>Add Transaction</h3>
+            <form id="add-transaction-form" class="flex space-around">
+                <input type="text" id="description" placeholder="Description" />
+                <input type="number" id="amount" placeholder="Amount" />
+                <input type="date" id="date" />
+                <select id="type">
+                    <option value="income">Income</option>
+                    <option value="expense">Expense</option>
+                </select>
+                <button id="form-button">Add Transaction</button>
+            </form>
+        </section>
+
+
+
+        <section id="filters" class="container more-padding filters flex column space-between">
+            <h3>Filters</h3>
+            <div class="filter-section flex space-around">
+                <input type="number" id="min-amount" placeholder="Min Amount">
+                <input type="number" id="max-amount" placeholder="Max Amount">
+                <input type="date" id="date-filter" />
+                <select id="filter-type">
+                   
+                    <option value="income" id="filter-income">Income</option>
+                    <option value="expense" id="filter-expense">Expense</option>
+                   
+                </select>
+                
+                <button id="apply-filters">Apply Filters</button>
+                <button id="clear-filters">Clear Filters</button>
+            </div>
+            
+        </section>
+
+
+
+        <section id="transaction-list" class ="transaction-table flex column space-between">
+            <h3>Transactions</h3>
+            <div class = "expense-table flex space-around">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                            <th>Type</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactions-table-body">
+                    
+                    </tbody>
+                </table>
+
+
+
+            </div>
+            
+        </section>
+
+
+
+
+    </main>
+    
+<script src="index.js"></script>  
+</body>
+</html>
