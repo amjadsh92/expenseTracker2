@@ -34,7 +34,7 @@ formButton.addEventListener("click", async (e) => {
       redirect: "follow"
     };
     
-     response = await fetch("addTransaction.php", requestOptions)
+     response = await fetch("./server/addTransaction.php", requestOptions)
      
 
      loadTransactions()
@@ -53,7 +53,7 @@ transactionList.addEventListener("click", async (e) => {
             redirect: "follow"
           };
           
-          await fetch("./deleteTransaction.php?id=" + id, requestOptions)
+          await fetch("./server/deleteTransaction.php?id=" + id, requestOptions)
 
           loadTransactions()
 
@@ -189,7 +189,7 @@ function updateBudget(transaction){
 
  const loadTransactions = async () => {
 
-     transactions  = await fetch("getAllTransactions.php")
+     transactions  = await fetch("./server/getAllTransactions.php")
      transactions = await transactions.json()
      showTransactions(transactions)
      totalBudget=0
